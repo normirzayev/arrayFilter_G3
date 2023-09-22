@@ -49,6 +49,7 @@ function ContextProvider({ children }) {
   let [data] = useState([
     {
       id: 1,
+      // sana:'',
       title: "iPhone 9",
       color: "black",
       description: "An apple mobile which is nothing like apple",
@@ -244,27 +245,11 @@ function ContextProvider({ children }) {
       ],
     },
   ]);
-  // let [filterData, setFilterData] = useState(data);
-
   function handleCategory(param) {
     setCatory(param);
-    // setFilterData(
-    //   data.filter((p) => {
-    //     if (p.category.includes(param)) {
-    //       return p;
-    //     }
-    //   })
-    // );
   }
   function handleColor(param) {
     setColor(param);
-    // setFilterData(
-    //   data.filter((p) => {
-    //     if (p.color.includes(param)) {
-    //       return p;
-    //     }
-    //   })
-    // );
   }
 
   return (
