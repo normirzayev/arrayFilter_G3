@@ -15,6 +15,9 @@ function Navbar() {
           <li>
             <NavLink to="/filterPage">filterPage</NavLink>
           </li>
+          <li>
+            <NavLink to="/reducer">reducer</NavLink>
+          </li>
         </ul>
         <h2>logo</h2>
       </nav>

@@ -7,6 +7,12 @@ function ContextProvider({ children }) {
   let colorBtn = ["", "red", "black", "white"];
   const [color, setColor] = useState("");
   const [catory, setCatory] = useState("");
+  const [value, setValue] = useState([0, 1500]);
+  const [sana, setSana] = useState({
+    from: "0001-01-01",
+    to: "2023-09-25",
+  });
+
   const [userData, setUserData] = useState(
     JSON.parse(localStorage.getItem("user")) || []
   );
@@ -46,10 +52,10 @@ function ContextProvider({ children }) {
     refreshLocal();
   };
 
-  let [data] = useState([
+  let data = [
     {
       id: 1,
-      // sana:'',
+      sana: "2023-03-17",
       title: "iPhone 9",
       color: "black",
       description: "An apple mobile which is nothing like apple",
@@ -72,6 +78,7 @@ function ContextProvider({ children }) {
       id: 2,
       title: "iPhone X",
       color: "white",
+      sana: "2023-03-27",
       description:
         "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
       price: 899,
@@ -91,6 +98,7 @@ function ContextProvider({ children }) {
     {
       id: 3,
       color: "black",
+      sana: "2023-05-10",
       title: "Samsung Universe 9",
       description:
         "Samsung's new variant which goes beyond Galaxy to the Universe",
@@ -107,6 +115,7 @@ function ContextProvider({ children }) {
       id: 4,
       title: "OPPOF19",
       color: "white",
+      sana: "2022-09-17",
       description: "OPPO F19 is officially announced on April 2021.",
       price: 280,
       discountPercentage: 17.91,
@@ -127,6 +136,7 @@ function ContextProvider({ children }) {
       id: 5,
       title: "Huawei P30",
       color: "red",
+      sana: "2023-09-25",
       description:
         "Huawei’s re-badged P30 Pro New Edition was officially unveiled yesterday in Germany and now the device has made its way to the UK.",
       price: 499,
@@ -146,6 +156,7 @@ function ContextProvider({ children }) {
       id: 6,
       title: "MacBook Pro",
       color: "red",
+      sana: "2023-03-15",
       description:
         "MacBook Pro 2021 with mini-LED display may launch between September, November",
       price: 1749,
@@ -166,6 +177,7 @@ function ContextProvider({ children }) {
       id: 7,
       title: "Samsung Galaxy Book",
       color: "black",
+      sana: "2023-09-20",
       description:
         "Samsung Galaxy Book S (2020) Laptop With Intel Lakefield Chip, 8GB of RAM Launched",
       price: 1499,
@@ -186,6 +198,7 @@ function ContextProvider({ children }) {
       id: 8,
       title: "Microsoft Surface Laptop 4",
       color: "red",
+      sana: "2023-09-24",
       description:
         "Style and speed. Stand out on HD video calls backed by Studio Mics. Capture ideas on the vibrant touchscreen.",
       price: 1499,
@@ -207,6 +220,7 @@ function ContextProvider({ children }) {
       id: 9,
       title: "Infinix INBOOK",
       color: "white",
+      sana: "2023-12-20",
       description:
         "Infinix Inbook X1 Ci3 10th 8GB 256GB 14 Win10 Grey – 1 Year Warranty",
       price: 1099,
@@ -227,6 +241,7 @@ function ContextProvider({ children }) {
     {
       id: 10,
       color: "red",
+      sana: "2023-05-30",
       title: "HP Pavilion 15-DK1056WM",
       description:
         "HP Pavilion 15-DK1056WM Gaming Laptop 10th Gen Core i5, 8GB, 256GB SSD, GTX 1650 4GB, Windows 10",
@@ -244,7 +259,28 @@ function ContextProvider({ children }) {
         "https://i.dummyjson.com/data/products/10/thumbnail.jpeg",
       ],
     },
-  ]);
+  ];
+  let [filterData, setFilterData] = useState(data);
+
+  let handleFilter = () => {
+    setFilterData(
+      data.filter((item) => {
+        if (
+          item.category.includes(catory) &&
+          item.color.includes(color) &&
+          value[0] <= item.price &&
+          value[1] >= item.price &&
+          sana.from <= item.sana &&
+          sana.to >= item.sana
+        ) {
+          return item;
+        }
+      })
+    );
+  };
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   function handleCategory(param) {
     setCatory(param);
   }
@@ -266,6 +302,12 @@ function ContextProvider({ children }) {
         handleColor,
         color,
         catory,
+        handleFilter,
+        filterData,
+        handleChange,
+        setSana,
+        sana,
+        value,
       }}
     >
       {children}
