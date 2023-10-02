@@ -9,65 +9,69 @@ export default function Reducer() {
   });
   let reducer = (state, action) => {
     let { type, payload } = action;
+    let lcRefresh = () => {
+      state = JSON.parse(localStorage.getItem("LcReduc")) || [];
+    };
     switch (type) {
       case "plus":
-        state = state.map((o) => {
-          return o.id === payload ? { ...o, soni: +o.soni + 1 } : o;
-        });
+        localStorage.setItem(
+          "LcReduc",
+          JSON.stringify(
+            state.map((o) => {
+              return o.id === payload ? { ...o, soni: +o.soni + 1 } : o;
+            })
+          )
+        );
+        lcRefresh();
         return state;
       case "minus":
-        return state.map((o) =>
-          o.id === payload ? { ...o, soni: +o.soni - 1 } : o
+        localStorage.setItem(
+          "LcReduc",
+          JSON.stringify(
+            state.map((o) => {
+              return o.id === payload && o.soni > 0
+                ? { ...o, soni: +o.soni - 1 }
+                : o;
+            })
+          )
         );
+        lcRefresh();
+        return state;
       case "submit":
         payload.preventDefault();
         if (!value.id) {
-          state = [...state, { ...value, id: Date.now() }];
+          localStorage.setItem(
+            "LcReduc",
+            JSON.stringify([...state, { ...value, id: Date.now() }])
+          );
         } else {
-          state = state.map((p) => (p.id === value.id ? value : p));
+          localStorage.setItem(
+            "LcReduc",
+            JSON.stringify(state.map((p) => (p.id === value.id ? value : p)))
+          );
         }
+        lcRefresh();
         setValue({
           nomi: "",
           soni: "",
         });
         return state;
       case "delete":
-        state = state.filter((i) => i.id !== payload);
+        localStorage.setItem(
+          "LcReduc",
+          JSON.stringify(state.filter((i) => i.id !== payload))
+        );
+        lcRefresh();
         return state;
       default:
         return state;
     }
   };
-  let array = [
-    {
-      soni: 0,
-      nomi: "acer",
-    },
-    {
-      soni: 0,
-      nomi: "mac",
-    },
-    {
-      soni: 0,
-      nomi: "lenova",
-    },
-    {
-      soni: 0,
-      nomi: "hp",
-    },
-    {
-      soni: 0,
-      nomi: "lg",
-    },
-    {
-      soni: 0,
-      nomi: "victus",
-    },
-  ];
-  array = array.map((p, index) => {
-    return { ...p, id: index };
-  });
-  let [count, dispatch] = useReducer(reducer, array);
+
+  let [count, dispatch] = useReducer(
+    reducer,
+    JSON.parse(localStorage.getItem("LcReduc")) || []
+  );
   let handleEdit = (param) => {
     setValue(param);
   };
