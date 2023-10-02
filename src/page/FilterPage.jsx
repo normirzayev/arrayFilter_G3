@@ -85,7 +85,7 @@ export default function FilterPage() {
         </div>
       </div>
       <div className="gridBox">
-        {data.length > 0 ? (
+        {filterData.length > 0 ? (
           // data
           //   .filter((item) => {
           //     if (
