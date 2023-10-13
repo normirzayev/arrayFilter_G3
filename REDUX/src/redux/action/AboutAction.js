@@ -18,5 +18,15 @@ function handleEdit(param) {
     payload: param,
   };
 }
-
-export { handleSend, handleDelete, handleEdit };
+function aboutDan_ol(param) {
+  return {
+    type: AboutType.olish,
+    payload: param,
+  };
+}
+function bolleanFunc() {
+  return {
+    type: "ozgar",
+  };
+}
+export { handleSend, handleDelete, handleEdit, aboutDan_ol, bolleanFunc };

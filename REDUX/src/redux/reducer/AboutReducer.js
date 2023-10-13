@@ -1,37 +1,27 @@
 import { AboutType } from "../action/ActionTypes";
-
-let data = JSON.parse(localStorage.getItem("localStr")) || [];
-
-function refLocal() {
-  return JSON.parse(localStorage.getItem("localStr")) || [];
-}
-
-const AboutReducer = (state = data, { type, payload }) => {
+let initialState = {
+  data: [],
+  qiymat: true,
+};
+const AboutReducer = (state = initialState, { type, payload }) => {
   switch (type) {
+    case AboutType.olish:
+      state = { ...state, data: payload };
+      return state;
     case AboutType.send:
-      localStorage.setItem("localStr", JSON.stringify([...state, payload]));
-      state = refLocal();
+      state = { ...state, data: [...state.data, payload] };
       return state;
     case AboutType.edit:
-      console.log(payload);
-      localStorage.setItem(
-        "localStr",
-        JSON.stringify(
-          state.map((item) => (item.id === payload.id ? payload : item))
-        )
-      );
-      state = refLocal();
+      let p = state.data.map((item) => {
+        return item.id === payload.id ? payload : item;
+      });
+      state = { ...state, data: p };
       return state;
-    case AboutType.delete:
-      localStorage.setItem(
-        "localStr",
-        JSON.stringify(state.filter((item) => item.id !== payload))
-      );
-      state = refLocal();
+    case "ozgar":
+      state = { ...state, qiymat: !state.qiymat };
       return state;
     default:
       return state;
   }
 };
-
-export default AboutReducer;
+export { AboutReducer };

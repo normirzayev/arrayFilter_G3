@@ -6,6 +6,7 @@ let AboutType = {
   send: "send",
   delete: "delete",
   edit: "edit",
+  olish: "getter",
 };
 
 export { HomeType, AboutType };

@@ -1,47 +1,60 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  bolleanFunc,
   handleDelete,
   handleEdit,
   handleSend,
 } from "../redux/action/AboutAction";
+import axios from "axios";
+import { Urls } from "../Urls";
 export default function About() {
-  let state = useSelector((state) => state.AboutReducer);
+  let { data, qiymat } = useSelector((state) => state.AboutReducer);
   let dispatch = useDispatch();
   let [value, setValue] = useState({
     name: "",
-    num: "",
+    age: "",
   });
-
   function getValue(e) {
     setValue({ ...value, [e.target.name]: e.target.value });
   }
-  function sendFun(e) {
+  let sendFun = async (e) => {
     e.preventDefault();
-    // console.log(value);
     if (!value?.id) {
-      dispatch(handleSend({ ...value, id: Date.now() }));
+      let res = await axios(Urls.people, { method: "post", data: value });
+      dispatch(handleSend(res.data));
     } else {
-      dispatch(handleEdit(value));
+      let res = await axios(`${Urls.people}/${value?.id}`, {
+        method: "put",
+        data: value,
+      });
+      dispatch(handleEdit(res.data));
     }
-  }
+  };
+
+  let editFun = async (ID) => {
+    let res = await axios(`${Urls.people}/${ID}`, { method: "get" });
+    setValue(res.data);
+  };
 
   return (
     <div>
       <h1>Form</h1>
+      <button onClick={() => dispatch(bolleanFunc())}> click</button>
+      <h1>{qiymat ? "true" : "false"}</h1>
       <form onSubmit={sendFun}>
         <input
           type="text"
-          placeholder="Enter name"
+          placeholder="Ismni kirit"
           name="name"
           value={value?.name}
           onChange={getValue}
         />
         <input
           type="number"
-          placeholder="Sonini kiritin"
-          name="num"
-          value={value?.num}
+          placeholder="Yoshni kirit"
+          name="age"
+          value={value?.age}
           onChange={getValue}
         />
         <button type="submit">Send</button>
@@ -52,19 +65,19 @@ export default function About() {
           <tr>
             <th>№</th>
             <th>Name</th>
-            <th>Num</th>
+            <th>age</th>
             <th colSpan={10}>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {state.map((item, i) => {
+          {data.map((item, i) => {
             return (
               <tr key={item.id}>
                 <th>{i + 1}</th>
-                <td>{item.name}</td>
-                <td>{item.num}</td>
+                <td>{item?.name}</td>
+                <td>{item?.age}</td>
                 <td>
-                  <button onClick={() => setValue(item)}>Edit</button>
+                  <button onClick={() => editFun(item.id)}>Edit</button>
                 </td>
                 <td>
                   <button onClick={() => dispatch(handleDelete(item.id))}>
